@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "024ed845-3fa7-4deb-bc64-f5f4388666f1": {
+      "type": "image-with-text-overlay",
+      "settings": {
+        "title": "Image with text overlay",
+        "content": "<p>Use overlay text to give your customers insight into your brand. Select imagery and text that relates to your style and story.<\/p>",
+        "show_image_overlay": false,
+        "color": "#ffffff"
+      }
+    }
+  },
+  "order": [
+    "024ed845-3fa7-4deb-bc64-f5f4388666f1"
+  ]
+}
+

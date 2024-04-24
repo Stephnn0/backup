@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collections-list",
+      "settings": {
+        "collections_to_show": "selected"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main",
+    "newsletter"
+  ]
+}

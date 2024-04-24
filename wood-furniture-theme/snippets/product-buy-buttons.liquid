@@ -1,0 +1,27 @@
+<div class="product-form__payment-container" {{ block.shopify_attributes }}>
+  {%- if product.template_suffix != 'contact' -%}
+    {%- if product.selected_or_first_available_variant.available -%}
+      {%- if product.template_suffix == 'pre-order' -%}
+        <button type="submit" class="product-form__add-button button button--primary" data-action="add-to-cart">{{ 'product.form.pre_order' | t }}</button>
+      {%- else -%}
+        <button type="submit" class="product-form__add-button button button--primary" data-action="add-to-cart">{{ 'product.form.add_to_cart' | t }}</button>
+      {%- endif -%}
+    {%- else -%}
+      <button type="submit" class="product-form__add-button button button--disabled" disabled>{{ 'product.form.sold_out' | t }}</button>
+    {%- endif -%}
+
+    {%- if block.settings.show_payment_button and product.template_suffix != 'pre-order' -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+  {%- else -%}
+    <a href="mailto:{{ shop.email }}" class="button button--primary">{{ 'product.form.contact_us' | t }}</a>
+  {%- endif -%}
+
+  {%- if block.settings.show_payment_button and product.selected_or_first_available_variant.available == false -%}
+    <style>
+      #shopify-section-{{ section.id }} .shopify-payment-button {
+        display: none;
+      }
+    </style>
+  {%- endif -%}
+</div>

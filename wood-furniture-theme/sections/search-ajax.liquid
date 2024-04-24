@@ -1,0 +1,74 @@
+<section class="search-ajax" data-section-id="{{ section.id }}">
+  {%- if search.results_count > 0 -%}
+    {%- if search.types contains 'product' -%}
+      <p class="search-bar__result-category">{{ 'header.search.products' | t }}</p>
+
+      <div class="search-bar__result-products">
+        {%- assign clean_terms = search.terms | split: ' AND ' | last | remove_first: '*' -%}
+
+        {%- for item in search.results limit: 3 -%}
+          <a href="{{ item.url }}" class="search-bar__result-item">
+            <div class="search-bar__image-container">
+              <div class="aspect-ratio aspect-ratio--square">
+                <img src="{{ item.featured_image | img_url: '120x120' }}" alt="{{ item.featured_image.alt | escape }}">
+              </div>
+            </div>
+
+            <div class="search-bar__item-info">
+              <p class="search-bar__item-title">{{ item.title | highlight: clean_terms }}</p>
+              <span class="search-bar__item-price">{{ item.price | money }}</span>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      {%- if search.results_count > 3 -%}
+        <button class="search-bar__view-all" type="submit">
+          {%- if settings.search_mode == 'product' -%}
+            {{- 'header.search.view_products' | t -}}
+          {%- else -%}
+            {{- 'header.search.view_results' | t -}}
+          {%- endif -%}
+
+          {%- render 'icon', icon: 'arrow-right' -%}
+        </button>
+      {%- endif -%}
+    {%- else -%}
+      {%- if search.types contains 'article' and search.types contains 'page' -%}
+        <p class="search-bar__result-category">{{ 'header.search.blog_posts_and_pages' | t }}</p>
+      {%- elsif search.types contains 'article' -%}
+        <p class="search-bar__result-category">{{ 'header.search.blog_posts' | t }}</p>
+      {%- else -%}
+        <p class="search-bar__result-category">{{ 'header.search.pages' | t }}</p>
+      {%- endif -%}
+
+      <ul class="search-bar__result-linklist list--unstyled" role="list">
+        {%- for item in search.results limit: 3 -%}
+          <li>
+            <a href="{{ item.url }}" class="search-bar__result-link">{{ item.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- else -%}
+    {%- assign show_empty_state = false -%}
+
+    {%- if settings.search_mode == 'product' -%}
+      {%- assign show_empty_state = true -%}
+    {%- elsif search.types contains 'article' or search.types contains 'page' -%}
+      {%- assign show_empty_state = true -%}
+    {%- endif -%}
+
+    {%- if show_empty_state -%}
+      <div class="search-bar__empty-state">
+        <p class="heading h4">{{ 'header.search.no_results' | t }}</p>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Search ajax"
+}
+{% endschema %}
