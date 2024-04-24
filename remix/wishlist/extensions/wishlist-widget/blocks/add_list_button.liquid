@@ -1,0 +1,136 @@
+<style>
+  /* Style the Add to Wish List button */
+  .add-to-wishlist {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Style the Remove from Wish List button */
+  .remove-from-wishlist {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
+<div>
+  <button onclick="getData()">call webhooks</button>
+
+  {% comment %} https://test-youtubee.myshopify.com/apps/bubbles/new-146/app/api {% endcomment %}
+  <button class="add-to-wishlist">Add to List</button>
+  <button class="remove-from-wishlist" style="display: none;">Remove from Wish List</button>
+  <input type="hidden" class="product-id" value="{{ product.id }}">
+</div>
+
+<script>
+  //------------------------------------------------
+  //------------------------------------------------ APP PROXY TEST
+
+  function getData() {
+    return new Promise((resolve, reject) => {
+      fetch("https://test-youtubee.myshopify.com/apps/akatski", {
+        method: 'POST',
+        redirect: 'manual',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+        .then((response) => {
+          console.log(response, 'response');
+          {% comment %} if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          } {% endcomment %}
+          console.log(response, 'response');
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  //------------------------------------------------
+  //------------------------------------------------
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var productId = document.querySelector('.product-id').value;
+    var addToWishListButton = document.querySelector('.add-to-wishlist');
+    var removeFromWishListButton = document.querySelector('.remove-from-wishlist');
+
+    //------------------------------------------------ Function to add product to wish list
+    //------------------------------------------------
+    //------------------------------------------------
+    function addToWishList() {
+      // Add the product ID to the wish list array
+      var wishList = JSON.parse(localStorage.getItem('wishList')) || [];
+      wishList.push(productId);
+
+      // Store the updated wish list in local storage
+      localStorage.setItem('wishList', JSON.stringify(wishList));
+
+      // Disable the Add to Wish List button
+      addToWishListButton.disabled = true;
+      addToWishListButton.style.backgroundColor = 'gray';
+
+      // Show the Remove from Wish List button
+      removeFromWishListButton.style.display = 'inline-block';
+    }
+
+    //------------------------------------------ Function to remove product from wish list
+    //------------------------------------------------
+    //------------------------------------------------
+    function removeFromWishList() {
+      // Remove the product ID from the wish list array
+      var wishList = JSON.parse(localStorage.getItem('wishList')) || [];
+      wishList = wishList.filter(function (item) {
+        return item !== productId;
+      });
+
+      // Store the updated wish list in local storage
+      localStorage.setItem('wishList', JSON.stringify(wishList));
+
+      // Enable the Add to Wish List button
+      addToWishListButton.disabled = false;
+      addToWishListButton.style.backgroundColor = '';
+
+      // Hide the Remove from Wish List button if the wish list is empty
+      if (wishList.length === 0) {
+        removeFromWishListButton.style.display = 'none';
+      }
+    }
+    //------------------------------------------------
+    //------------------------------------------------
+    //------------------------------------------------
+
+    // Event listener for Add to Wish List button click
+    addToWishListButton.addEventListener('click', addToWishList);
+
+    // Event listener for Remove from Wish List button click
+    removeFromWishListButton.addEventListener('click', removeFromWishList);
+
+    // Check if the current product is already in the wish list when the page loads
+    var wishList = JSON.parse(localStorage.getItem('wishList')) || [];
+    if (wishList.indexOf(productId) !== -1) {
+      addToWishListButton.disabled = true;
+      addToWishListButton.style.backgroundColor = 'gray';
+      removeFromWishListButton.style.display = 'inline-block';
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Add to list",
+  "target": "section"
+}
+{% endschema %}

@@ -1,0 +1,90 @@
+{% assign targetProductIds = productIds | split: ',' %}
+<head></head>
+
+<body class="main">
+  {% comment %}------------- wish list widget--------- {% endcomment %}
+  <div
+    id="chat-widget"
+    class="chat-widget-style"
+    onclick="toggleChat()"
+  >
+    <span>Wish</span>
+  </div>
+  {% comment %} %}-------------wish list body %}-------------{% endcomment %}
+  <div id="chat-window" class="chat-window-style">
+    <h1>WISH LIST ITEMS</h1>
+    <div id="wish-list-items"></div>
+    <hr>
+    <h1>liquid</h1>
+    {% for product in collections.all.products %}
+      {% comment %} {% if targetProductIds contains product.id %} {% endcomment %}
+      <h1>{{ product.title }}</h1>
+      {% comment %} {% endif %} {% endcomment %}
+    {% endfor %}
+  </div>
+</body>
+
+<script>
+  //------------------------------------------------
+  //------------------------------------------------ FUNCTION TO RETRIVE WISHLIST FROM LOCAL STORAGE
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Retrieve wish list items from local storage
+    var wishList = JSON.parse(localStorage.getItem('wishList')) || [];
+
+    // Get the container where wish list items will be displayed
+    var wishListContainer = document.getElementById('wish-list-items');
+
+    // Loop through each wish list item and create HTML elements to display them
+    wishList.forEach(function (productId) {
+      // Create a div element to display the product ID
+      var div = document.createElement('div');
+      div.textContent = productId;
+
+      // Add the div element to the wish list container
+      wishListContainer.appendChild(div);
+    });
+  });
+
+  //------------------------------------------------
+  //------------------------------------------------ OPEN BUTTON
+
+  function toggleChat() {
+    const chatWindow = document.getElementById('chat-window');
+    chatWindow.style.display = chatWindow.style.display == 'none' ? 'block' : 'none';
+  }
+
+  document.addEventListener('click', function (event) {
+    const chatWindow = document.getElementById('chat-window');
+    const chatWidget = document.getElementById('chat-widget');
+
+    if (!chatWindow.contains(event.target) && !chatWidget.contains(event.target)) {
+      // Clicked outside of both chat window and chat widget
+      chatWindow.style.display = 'none';
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "remix chat widget",
+  "target": "body",
+  "stylesheet": "../assets/app.css",
+  "javascript": "../assets/app.js",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "product",
+      "autofill": true
+    },
+
+    {
+      "type": "color",
+      "id": "colour",
+      "label": "Star Colour",
+      "default": "#ff0000"
+    }
+  ]
+}
+{% endschema %}
