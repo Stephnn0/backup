@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "96ddade08ba9f5baa863cd4aaf7cb956"
+name = "production-shipping"
+handle = "production-shipping"
+application_url = "https://guys-geography-affected-cape.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "store-chec.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_metaobject_definitions,read_metaobjects,write_metaobject_definitions,write_metaobjects,write_products"
+
+[auth]
+redirect_urls = [
+  "https://guys-geography-affected-cape.trycloudflare.com/auth/callback",
+  "https://guys-geography-affected-cape.trycloudflare.com/auth/shopify/callback",
+  "https://guys-geography-affected-cape.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-04"
+
+[pos]
+embedded = false
